@@ -15,6 +15,7 @@
     "@headlessui/vue": "^1.7.14",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.4",
+    "@types/chrome": "^0.0.242",
     "@vueuse/core": "^10.2.1",
     "ccat-api": "^0.6.1",
     "daisyui": "^3.3.1",
