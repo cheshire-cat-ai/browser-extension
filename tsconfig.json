@@ -17,7 +17,8 @@
     "types": [
       "vite/client",
       "node",
-      "chrome"
+      "chrome",
+      "firefox-webext-browser"
     ],
     "moduleResolution": "node",
     "resolveJsonModule": true,

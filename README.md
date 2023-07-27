@@ -1,3 +1,3 @@
-# Cheshire Cat Chrome Extension
+# Cheshire Cat Browser Extension
 
-This is the Chrome extension to integrate the [Cheshire Cat](https://github.com/cheshire-cat-ai/core).
+This is the Browser extension to integrate the [Cheshire Cat](https://github.com/cheshire-cat-ai/core).
