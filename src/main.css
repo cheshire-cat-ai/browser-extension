@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+@tailwind base;
+
+body {
+  scrollbar-width: 10px;
+  scrollbar-color: hsl(var(--b1)) hsl(var(--n));
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--n));
+  border-radius: 10px;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Ubuntu", system-ui, sans-serif;
+  }
+  body {
+    @apply flex flex-col h-screen max-h-screen min-h-screen w-[32rem];
+  }
+  #app, #settings {
+    @apply grow;
+  }
+}
+
+@layer components {
+  .btn-outline {
+    @apply border-2;
+  }
+  .focus {
+    @apply !bg-primary hover:bg-primary-focus focus:bg-primary-focus text-base-100;
+  }
+  .btn-ghost {
+    @apply disabled:bg-transparent;
+  }
+  .btn-outline.btn-error:hover, .btn-outline.btn-success:hover,
+  .btn-outline.btn-info:hover, .btn-outline.btn-warning:hover,
+  .btn-error, .btn-info, .btn-success, .btn-warning {
+    @apply text-base-100;
+  }
+  .btn-error:hover:not(.btn-outline), .btn-error.btn-active:not(.btn-outline),
+  .btn-info:hover:not(.btn-outline), .btn-info.btn-active:not(.btn-outline),
+  .btn-success:hover:not(.btn-outline), .btn-success.btn-active:not(.btn-outline),
+  .btn-warning:hover:not(.btn-outline), .btn-warning.btn-active:not(.btn-outline) {
+    @apply brightness-[0.8];
+  }
+  .checkbox {
+    @apply border-2;
+  }
+  .select, .input, .textarea {
+    @apply overflow-hidden outline outline-offset-2 bg-transparent outline-2 border-0 !ring-0 !transition-all !duration-75 focus:outline-primary;
+  }
+  .toggle {
+    @apply !bg-none !border-2;
+  }
+  .chat-bubble a {
+    @apply !link !link-info;
+  }
+  .chat-bubble table {
+    @apply !table !table-xs;
+  }
+  .chat-bubble table :where(thead, tfoot) {
+    @apply !text-base-100;
+  }
+  .chat-bubble pre {
+    @apply !my-4 !whitespace-pre-wrap;
+  }
+  .chat-bubble ul {
+    @apply !list-disc !list-inside;
+  }
+  .chat-bubble ol {
+    @apply !list-decimal !list-inside;
+  }
+}
