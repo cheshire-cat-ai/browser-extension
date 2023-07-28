@@ -2,11 +2,15 @@
     "manifest_version": 3,
     "name": "Cheshire Cat AI",
     "version": "0.0.1",
-    "description": "Browser Extension to communicate with the Cheshire Cat AI",
+    "description": "Communicate with the Cheshire Cat AI from within your favorite browser!",
     "author": "zAlweNy26",
     "homepage_url": "https://github.com/cheshire-cat-ai/browser-extension",
     "icons": {
         "128": "icon.png"
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
     },
     "action": {
         "default_icon": {

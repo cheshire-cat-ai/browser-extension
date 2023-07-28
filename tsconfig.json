@@ -5,7 +5,9 @@
     "src/**/*", 
     "src/**/*.vue",
     "components.d.ts",
-    "auto-imports.d.ts",
+    "auto-imports.d.ts", 
+    "scripts", 
+    "background.ts",
   ],
   "compilerOptions": {
     "target": "ESNext",

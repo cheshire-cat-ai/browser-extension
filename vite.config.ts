@@ -40,14 +40,15 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        options: resolve(__dirname, 'options.html')
+        options: resolve(__dirname, 'options.html'),
+        background: resolve(__dirname, 'background.ts'),
       },
       output: {
         minifyInternalExports: true,
-        entryFileNames: 'extension.js',
+        entryFileNames: (info) => `${info.name.includes('background') ? 'background' : 'extension'}.js`,
         assetFileNames: (info) => `${info.name?.endsWith('css') ? 'extension' : '[name]'}[extname]`,
-        chunkFileNames: 'chunk.js',
-        manualChunks: () => 'chunk.js',
+        chunkFileNames: '[name].js',
+        manualChunks: (id) => id.includes('background.ts') ? 'background' : 'extension',
         generatedCode: {
           preset: 'es2015',
           constBindings: true,

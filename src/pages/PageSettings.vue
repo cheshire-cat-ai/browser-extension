@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { useSettings } from '@stores/useSettings'
-import { capitalize } from 'lodash';
+import { capitalize } from 'lodash'
 
 const settingsStore = useSettings()
-const { getSetting, updateSetting } = settingsStore
+const { sendContent } = settingsStore
 const { settings, isDark } = storeToRefs(settingsStore)
 
-const ciaone = ref()
-
-onMounted(async () => {
-	await updateSetting('ciao', 'suca')
-	ciaone.value = await getSetting('ciao')
+watchDeep(settings, () => {
+	sendContent("settings", settings.value)
 })
 
 const getType = (type: string) => {
@@ -18,12 +15,10 @@ const getType = (type: string) => {
 	switch (type) {
 		case 'number':
 			inputType = 'number'
-			break;
+			break
 		case 'boolean':
 			inputType = 'checkbox'
-			break;
-		default:
-			break;
+			break
 	}
 	return inputType
 }
@@ -33,12 +28,10 @@ const getClasses = (type: string) => {
 	switch (type) {
 		case 'number':
 			classes += ' pl-2 pr-0'
-			break;
+			break
 		case 'boolean':
 			classes = '!toggle !toggle-success'
-			break;
-		default:
-			break;
+			break
 	}
 	return classes
 }
@@ -54,7 +47,8 @@ const getClasses = (type: string) => {
 						{{ key.split(/(?=[A-Z])/).map(k => capitalize(k)).join(" ") }}
 					</span>
 				</label>
-				<input v-model="(settings as any)[key]" :type="getType(typeof val)" :class="getClasses(typeof val)">
+				<input v-model="(settings as any)[key]" 
+					:type="getType(typeof val)" :class="getClasses(typeof val)">
 			</div>
 		</template>
 	</div>
