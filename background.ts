@@ -9,11 +9,11 @@ const conversation: string[] = [];
         }
         case 'getSettings': {
             const got = await (chrome || browser).storage.sync.get('settings')
-            sendResponse(got['settings'])
+            sendResponse(JSON.stringify(got['settings']))
             break
         }
         case 'getMessages': {
-            sendResponse(conversation)
+            sendResponse(JSON.stringify(conversation))
             break
         }
         case 'setMessages': {

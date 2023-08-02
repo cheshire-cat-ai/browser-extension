@@ -48,7 +48,7 @@ const getClasses = (type: string) => {
 				</div>
 			</template>
 		</div>
-		<button class="btn btn-success mt-auto normal-case" @click="sendContent('settings', settings)">
+		<button class="btn btn-success mt-auto normal-case" @click="sendContent('settings', JSON.stringify(settings))">
 			Save
 		</button>
 	</div>

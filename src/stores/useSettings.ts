@@ -13,7 +13,8 @@ export const useSettings = defineStore('settings', () => {
 
   tryOnMounted(() => {
     getSetting("settings").then(res => {
-      if (res) settings.value = res
+      console.log("Setting:", res)
+      if (res) settings.value = JSON.parse(res)
       apiClient.value = new CatClient(settings.value)
     })
   })
@@ -29,11 +30,11 @@ export const useSettings = defineStore('settings', () => {
     await (chrome || browser).storage.sync.set({ [key]: value })
   }
 
-  const getContent = (action: string, response: (response: any) => void) => {
+  const getContent = (action: string, response: (response: string) => void) => {
     (chrome || browser).runtime.sendMessage({ action: `get${capitalize(action)}` }, response)
   }
 
-  const sendContent = (action: string, content: any) => {
+  const sendContent = (action: string, content: string) => {
     (chrome || browser).runtime.sendMessage({ action: `set${capitalize(action)}`, content })
   }
 

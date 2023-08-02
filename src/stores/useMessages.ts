@@ -41,7 +41,10 @@ export const useMessages = defineStore('messages', () => {
   const { apiClient } = storeToRefs(settings)
 
   watchEffect(() => {
-    getContent("messages", (msgs) => currentState.messages = msgs)
+    getContent("messages", (msgs) => {
+      if (!msgs) return
+      currentState.messages = JSON.parse(msgs)
+    })
     /**
      * Subscribes to the messages service on component mount
      * and dispatches the received messages to the store.
@@ -88,7 +91,7 @@ export const useMessages = defineStore('messages', () => {
       ...message
     }
     currentState.messages.push(msg)
-    sendContent("messages", msg)
+    sendContent("messages", JSON.stringify(msg))
     currentState.loading = msg.sender === 'user'
   }
 
