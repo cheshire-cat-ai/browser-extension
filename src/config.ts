@@ -1,20 +1,7 @@
 import { AxiosError } from "axios"
 import type { JSONResponse } from "@models/JSONSchema"
 import { ApiError } from 'ccat-api'
-import { useSettings } from '@stores/useSettings'
-import { type CatClient, type CancelablePromise } from 'ccat-api'
-
-export const Features = ['record', 'web', 'file', 'memory', 'reset'] as const
-export type Feature = typeof Features[number]
-
-const { getContent } = useSettings()
-
-/**
- * API client to make requests to the endpoints and passing the API_KEY for authentication.
- */
-export let apiClient: CatClient
-
-getContent("client", (res) => apiClient = res)
+import { type CancelablePromise } from 'ccat-api'
 
 /**
  * A function that wraps the promise request into a try/catch block

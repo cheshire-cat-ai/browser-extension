@@ -1,6 +1,7 @@
 import type { FileUploaderState } from '@stores/types'
 import { getErrorMessage } from '@utils/errors'
-import { apiClient, tryRequest } from '@/config'
+import { tryRequest } from '@/config'
+import { useSettings } from '@stores/useSettings'
 import { useNotifications } from '@stores/useNotifications'
 
 export const useRabbitHole = defineStore('rabbitHole', () => {
@@ -10,10 +11,12 @@ export const useRabbitHole = defineStore('rabbitHole', () => {
 
   const { showNotification } = useNotifications()
 
+  const { apiClient } = storeToRefs(useSettings())
+
   const sendFile = (file: File) => {
     currentState.loading = true
     tryRequest(
-      apiClient.api?.rabbitHole.uploadFile({ file }), 
+      apiClient.value?.api?.rabbitHole.uploadFile({ file }), 
       `File ${file.name} successfully sent down the rabbit hole`, 
       "Unable to send the file to the rabbit hole"
     ).then(({ data }) => {
@@ -31,7 +34,7 @@ export const useRabbitHole = defineStore('rabbitHole', () => {
   const sendMemory = (file: File) => {
     currentState.loading = true
     tryRequest(
-      apiClient.api?.rabbitHole.uploadMemory({ file }), 
+      apiClient.value?.api?.rabbitHole.uploadMemory({ file }), 
       "Memories file successfully sent down the rabbit hole", 
       "Unable to send the memories to the rabbit hole"
     ).then(({ data }) => {
@@ -49,7 +52,7 @@ export const useRabbitHole = defineStore('rabbitHole', () => {
   const sendWebsite = (url: string) => {
     currentState.loading = true
     tryRequest(
-      apiClient.api?.rabbitHole.uploadUrl({ url }), 
+      apiClient.value?.api?.rabbitHole.uploadUrl({ url }), 
       "Website successfully sent down the rabbit hole", 
       "Unable to send the website to the rabbit hole"
     ).then(({ data }) => {

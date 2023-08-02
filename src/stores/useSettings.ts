@@ -1,18 +1,21 @@
-import { type CatSettings } from 'ccat-api'
+import CatClient, { type CatSettings } from 'ccat-api'
 import { capitalize } from "lodash"
 
 export const useSettings = defineStore('settings', () => {
   const settings = ref<CatSettings>({
     authKey: 'meow',
     baseUrl: 'localhost',
-    port: '1865',
+    port: 1865,
     secure: false,
   })
 
-  tryOnMounted(async () => {
-    const got = await getSetting("settings")
-    if (!got) return
-    settings.value = got
+  const apiClient = ref<CatClient>()
+
+  tryOnMounted(() => {
+    getSetting("settings").then(res => {
+      if (res) settings.value = res
+      apiClient.value = new CatClient(settings.value)
+    })
   })
 
   const isDark = usePreferredDark()
@@ -37,6 +40,7 @@ export const useSettings = defineStore('settings', () => {
   return {
     settings,
     isDark,
+    apiClient,
     getSetting,
     updateSetting,
     getContent,

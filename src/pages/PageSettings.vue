@@ -6,10 +6,6 @@ const settingsStore = useSettings()
 const { sendContent } = settingsStore
 const { settings, isDark } = storeToRefs(settingsStore)
 
-watchDeep(settings, () => {
-	sendContent("settings", settings.value)
-})
-
 const getType = (type: string) => {
 	let inputType = 'text'
 	switch (type) {
@@ -38,18 +34,22 @@ const getClasses = (type: string) => {
 </script>
 
 <template>
-	<div :data-theme="isDark ? 'dark' : 'light'"
-		class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 p-2">
-		<template v-for="[key, val] in Object.entries(settings)" :key="key">
-			<div class="form-control">
-				<label class="label">
-					<span class="label-text font-medium text-primary">
-						{{ key.split(/(?=[A-Z])/).map(k => capitalize(k)).join(" ") }}
-					</span>
-				</label>
-				<input v-model="(settings as any)[key]" 
-					:type="getType(typeof val)" :class="getClasses(typeof val)">
-			</div>
-		</template>
+	<div :data-theme="isDark ? 'dark' : 'light'" class="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
+		<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 p-2">
+			<template v-for="[key, val] in Object.entries(settings)" :key="key">
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text font-medium text-primary">
+							{{ key.split(/(?=[A-Z])/).map(k => capitalize(k)).join(" ") }}
+						</span>
+					</label>
+					<input v-model="(settings as any)[key]" 
+						:type="getType(typeof val)" :class="getClasses(typeof val)">
+				</div>
+			</template>
+		</div>
+		<button class="btn btn-success btn-sm mt-auto normal-case" @click="sendContent('settings', settings)">
+			Save
+		</button>
 	</div>
 </template>

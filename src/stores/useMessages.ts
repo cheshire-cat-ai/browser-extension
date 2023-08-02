@@ -2,8 +2,7 @@ import type { MessagesState } from '@stores/types'
 import type { BotMessage, UserMessage } from '@models/Message'
 import { now, uniqueId } from 'lodash'
 import { useNotifications } from '@stores/useNotifications'
-import { apiClient } from '@/config'
-import type { PromptSettings } from 'ccat-api'
+import { useSettings } from '@stores/useSettings'
 
 export const useMessages = defineStore('messages', () => {
   const currentState = reactive<MessagesState>({
@@ -37,13 +36,18 @@ export const useMessages = defineStore('messages', () => {
 
   const { showNotification } = useNotifications()
 
-  tryOnMounted(() => {
+  const settings = useSettings()
+  const { sendContent, getContent } = settings
+  const { apiClient } = storeToRefs(settings)
+
+  watchEffect(() => {
+    getContent("messages", (msgs) => currentState.messages = msgs)
     /**
      * Subscribes to the messages service on component mount
      * and dispatches the received messages to the store.
      * It also dispatches the error to the store if an error occurs.
      */
-    apiClient.onConnected(() => {
+    apiClient.value?.onConnected(() => {
       currentState.ready = true
     }).onMessage(({ content, type, why }) => {
       if (type === 'chat') {
@@ -71,7 +75,7 @@ export const useMessages = defineStore('messages', () => {
     /**
      * Unsubscribes to the messages service on component unmount
      */
-    apiClient.close()
+    apiClient.value?.close()
   })
 
   /**
@@ -84,6 +88,7 @@ export const useMessages = defineStore('messages', () => {
       ...message
     }
     currentState.messages.push(msg)
+    sendContent("messages", msg)
     currentState.loading = msg.sender === 'user'
   }
 
@@ -100,7 +105,7 @@ export const useMessages = defineStore('messages', () => {
    * Sends a message to the messages service and dispatches it to the store
    */
   const dispatchMessage = async (message: string) => {
-    apiClient.send(message)
+    apiClient.value?.send(message)
     addMessage({
       text: message.trim(),
       timestamp: now(),
