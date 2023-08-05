@@ -3,14 +3,15 @@
     "name": "Cheshire Cat AI",
     "version": "0.0.1",
     "description": "Communicate with the Cheshire Cat AI from within your favorite browser!",
-    "author": "zAlweNy26",
+    "author": "zAlweNy26 & Cheshire Cat Contributors",
     "homepage_url": "https://github.com/cheshire-cat-ai/browser-extension",
     "icons": {
         "128": "icon.png"
     },
     "background": {
-        "service_worker": "background.js",
-        "type": "module"
+        "scripts": [
+			"background.js"
+		]
     },
     "action": {
         "default_icon": {
@@ -25,6 +26,13 @@
     ],
     "options_ui": {
         "page": "options.html",
-        "open_in_tab": false
+        "open_in_tab": false,
+        "browser_style": true
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "extension@cheshire-cat-ai.org",
+            "strict_min_version": "42.0"
+        }
     }
 }

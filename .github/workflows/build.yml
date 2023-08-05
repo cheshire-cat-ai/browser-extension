@@ -11,7 +11,8 @@ permissions:
   contents: write
 
 jobs:
-  build:
+
+  chrome:
     timeout-minutes: 120
     runs-on: ubuntu-latest
     steps:
@@ -21,20 +22,58 @@ jobs:
         node-version: 18
     - name: Install dependencies
       run: npm ci
+    - name: Rename manifest
+      run: mv public/manifest-chrome.json public/manifest.json
+    - name: Delete other manifest
+      run: rm -f public/manifest-firefox.json
     - name: Build static files
       run: npm run build --if-present
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.7.1
       with:
         type: 'zip'
-        filename: 'release.zip'
+        filename: 'chrome.zip'
         directory: './dist'
         path: '.'
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
       with:
         tag: 'Extension'
-        artifacts: './dist/release.zip'
+        artifacts: './dist/chrome.zip'
+        allowUpdates: true
+        replacesArtifacts: true
+        body: |
+          ${{ github.event.head_commit.message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+  firefox:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: Install dependencies
+      run: npm ci
+    - name: Rename manifest
+      run: mv public/manifest-firefox.json public/manifest.json
+    - name: Delete other manifest
+      run: rm -f public/manifest-chrome.json
+    - name: Build static files
+      run: npm run build --if-present
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'firefox.zip'
+        directory: './dist'
+        path: '.'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        tag: 'Extension'
+        artifacts: './dist/firefox.zip'
         allowUpdates: true
         replacesArtifacts: true
         body: |
