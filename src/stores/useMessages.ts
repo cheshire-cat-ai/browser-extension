@@ -43,7 +43,11 @@ export const useMessages = defineStore('messages', () => {
   watchEffect(() => {
     getContent("messages", (msgs) => {
       if (!msgs) return
-      currentState.messages = JSON.parse(msgs)
+      let messages = JSON.parse(msgs)
+      if (Array.isArray(messages) && messages.length > 0) {
+        messages = messages.map(v => JSON.parse(v))
+        currentState.messages = messages
+      }
     })
     /**
      * Subscribes to the messages service on component mount
@@ -98,8 +102,8 @@ export const useMessages = defineStore('messages', () => {
   /**
    * Selects 5 random default messages from the messages slice.
    */
-  const selectRandomDefaultMessages = (defaults: string[] = []) => {
-    const messages = defaults.length > 0 ? [...defaults] : [...currentState.defaultMessages]
+  const selectRandomDefaultMessages = () => {
+    const messages = [...currentState.defaultMessages]
     const shuffled = messages.sort(() => 0.5 - Math.random())
     return shuffled.slice(0, 5)
   }
