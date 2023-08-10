@@ -21,13 +21,13 @@ jobs:
       with:
         node-version: 18
     - name: Install dependencies
-      run: npm ci
+      run: pnpm i --frozen-lockfile
     - name: Rename manifest
       run: mv public/manifest-chrome.json public/manifest.json
     - name: Delete other manifest
       run: rm -f public/manifest-firefox.json
     - name: Build static files
-      run: npm run build --if-present
+      run: pnpm build --if-present
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.7.1
       with:
@@ -55,13 +55,13 @@ jobs:
       with:
         node-version: 18
     - name: Install dependencies
-      run: npm ci
+      run: pnpm i --frozen-lockfile
     - name: Rename manifest
       run: mv public/manifest-firefox.json public/manifest.json
     - name: Delete other manifest
       run: rm -f public/manifest-chrome.json
     - name: Build static files
-      run: npm run build --if-present
+      run: pnpm build --if-present
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.7.1
       with:

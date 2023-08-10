@@ -13,7 +13,6 @@ export const useSettings = defineStore('settings', () => {
 
   tryOnMounted(() => {
     getSetting("settings").then(res => {
-      console.log("Setting:", res)
       if (res) settings.value = JSON.parse(res)
       apiClient.value = new CatClient(settings.value)
     })

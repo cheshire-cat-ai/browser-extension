@@ -2,8 +2,8 @@
 import { useRabbitHole } from '@stores/useRabbitHole'
 import { useMessages } from '@stores/useMessages'
 import { useSettings } from '@stores/useSettings'
+import { useExtension } from '@stores/useExtension'
 import { AcceptedFileTypes, type AcceptedFileType, AcceptedMemoryTypes, type AcceptedMemoryType } from 'ccat-api'
-import ModalBox from '@components/ModalBox.vue'
 
 const { isDark } = storeToRefs(useSettings())
 
@@ -14,8 +14,9 @@ const messagesStore = useMessages()
 const { dispatchMessage, selectRandomDefaultMessages } = messagesStore
 const { currentState: messagesState } = storeToRefs(messagesStore)
 
-const userMessage = ref(''), insertedURL = ref(''), isScrollable = ref(false), isTwoLines = ref(false)
-const boxUploadURL = ref<InstanceType<typeof ModalBox>>()
+const { getCurrentTab } = useExtension()
+
+const userMessage = ref(''), isScrollable = ref(false), isTwoLines = ref(false)
 
 const { textarea: textArea } = useTextareaAutosize({
 	input: userMessage,
@@ -28,7 +29,6 @@ const { textarea: textArea } = useTextareaAutosize({
 
 const { isListening, isSupported, toggle: toggleRecording, result: transcript } = useSpeechRecognition()
 const { open: openFile, onChange: onFileUpload } = useFileDialog()
-const { open: openMemory, onChange: onMemoryUpload } = useFileDialog()
 
 const filesStore = useRabbitHole()
 const { sendFile, sendWebsite, sendMemory } = filesStore
@@ -61,6 +61,13 @@ const contentHandler = (content: string | File[] | null) => {
 			else if (AcceptedMemoryTypes.includes(f.type as AcceptedMemoryType)) sendMemory(f)
 		})
 	}
+}
+
+const uploadCurrentWebSite = () => {
+	getCurrentTab(tabs => {
+		const tab = tabs[0]
+		if (tab.url) sendWebsite(tab.url)
+	})
 }
 
 /**
@@ -96,15 +103,6 @@ onFileUpload(files => {
 })
 
 /**
- * Handles the memory upload by calling the Rabbit Hole endpoint with the file attached
- * and calls the onUpload callback if it exists.
- */
-onMemoryUpload(files => {
-	if (files == null) return
-	sendMemory(files[0])
-})
-
-/**
  * When the user stops recording, the transcript will be sent to the messages service.
  */
 watchEffect(() => {
@@ -121,20 +119,6 @@ watchDeep(messagesState, () => {
 	scrollToBottom()
 	textArea.value?.focus()
 }, { flush: 'post' })
-
-/**
- * Dispatches the inserted url to the RabbitHole service and closes the modal.
- */
-const dispatchWebsite = () => {
-	if (!insertedURL.value) return
-	try { 
-		new URL(insertedURL.value)
-		sendWebsite(insertedURL.value)
-		boxUploadURL.value?.toggleModal()
-	} catch (_) {
-		insertedURL.value = ''
-	}
-}
 
 /**
  * Dispatches the user's message to the Messages service.
@@ -238,21 +222,9 @@ const scrollToBottom = () => window.scrollTo({ behavior: 'smooth', left: 0, top:
 								</button>
 								<ul tabindex="0" class="dropdown-content join join-vertical !-right-1/4 z-10 mb-5 p-0">
 									<li>
-										<!-- :disabled="rabbitHoleState.loading" -->
-										<button disabled
-											class="btn join-item w-full flex-nowrap px-2" 
-											@click="openMemory({ multiple: false, accept: AcceptedMemoryTypes.join(',') })">
-											<span class="grow normal-case">Upload memories</span>
-											<span class="rounded-lg bg-success p-1 text-base-100">
-												<ph-brain-fill class="h-6 w-6" />
-											</span>
-										</button>
-									</li>
-									<li>
 										<button :disabled="rabbitHoleState.loading" 
-											class="btn join-item w-full flex-nowrap px-2" 
-											@click="boxUploadURL?.toggleModal()">
-											<span class="grow normal-case">Upload url</span>
+											class="btn join-item h-auto w-full flex-nowrap p-2" @click="uploadCurrentWebSite()">
+											<span class="grow normal-case">Upload current page</span>
 											<span class="rounded-lg bg-info p-1 text-base-100">
 												<heroicons-globe-alt class="h-6 w-6" />
 											</span>
@@ -260,7 +232,7 @@ const scrollToBottom = () => window.scrollTo({ behavior: 'smooth', left: 0, top:
 									</li>
 									<li>
 										<button :disabled="rabbitHoleState.loading" 
-											class="btn join-item w-full flex-nowrap px-2" 
+											class="btn join-item h-auto w-full flex-nowrap p-2" 
 											@click="openFile({ multiple: false, accept: AcceptedFileTypes.join(',') })">
 											<span class="grow normal-case">Upload file</span>
 											<span class="rounded-lg bg-warning p-1 text-base-100">
@@ -283,19 +255,6 @@ const scrollToBottom = () => window.scrollTo({ behavior: 'smooth', left: 0, top:
 					<heroicons-arrow-down-20-solid class="h-5 w-5" />
 				</button>
 			</div>
-			<ModalBox ref="boxUploadURL">
-				<div class="flex flex-col items-center justify-center gap-4 text-neutral">
-					<h3 class="text-lg font-bold">
-						Insert URL
-					</h3>
-					<p>Write down the URL you want the Cat to digest :</p>
-					<input v-model.trim="insertedURL" type="text" placeholder="Enter url..."
-						class="input input-primary input-sm w-full !transition-all">
-					<button class="btn btn-primary btn-sm" @click="dispatchWebsite">
-						Send
-					</button>
-				</div>
-			</ModalBox>
 		</div>
 	</div>
 </template>

@@ -1,7 +1,6 @@
 import { AxiosError } from "axios"
 import type { JSONResponse } from "@models/JSONSchema"
-import { ApiError } from 'ccat-api'
-import { type CancelablePromise } from 'ccat-api'
+import { ApiError, type CancelablePromise } from "ccat-api"
 
 /**
  * A function that wraps the promise request into a try/catch block
