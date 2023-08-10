@@ -31,7 +31,7 @@ jobs:
     - name: Delete other manifest
       run: rm -f public/manifest-firefox.json
     - name: Build static files
-      run: pnpm build --if-present
+      run: pnpm build
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.7.1
       with:
@@ -69,7 +69,7 @@ jobs:
     - name: Delete other manifest
       run: rm -f public/manifest-chrome.json
     - name: Build static files
-      run: pnpm build --if-present
+      run: pnpm build
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.7.1
       with:
