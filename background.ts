@@ -23,4 +23,41 @@ const conversation: string[] = [];
         default:
             break
     }
+});
+
+/*(chrome || browser).contextMenus.onClicked.addListener((info, tab) => {
+    const action = info.menuItemId
+    //let content
+    if (tab?.id) {
+        switch (action) {
+            case 'textSelectionToCat':
+                //content = info.selectionText
+                break;
+            case 'pageToCat':
+                //content = info.pageUrl
+                break;
+            default:
+                break;
+        }
+        //(chrome || browser).tabs.sendMessage(tab.id, { action, content })
+    }
 })
+
+const addContextMenus = () => {
+    (chrome || browser).contextMenus.create({
+        title: 'Send text to the Cheshire Cat',
+        contexts: ['selection'],
+        id: 'textSelectionToCat'
+    });
+
+    (chrome || browser).contextMenus.create({
+        title: 'Send page to the Cheshire Cat',
+        contexts: ['page'],
+        id: 'pageToCat'
+    });
+}*/
+
+(chrome || browser).runtime.onInstalled.addListener(() => {
+    console.log("Cheshire Cat AI extension installed successfully!")
+    //addContextMenus()
+});

@@ -63,11 +63,9 @@ const contentHandler = (content: string | File[] | null) => {
 	}
 }
 
-const uploadCurrentWebSite = () => {
-	getCurrentTab(tabs => {
-		const tab = tabs[0]
-		if (tab.url) sendWebsite(tab.url)
-	})
+const uploadCurrentWebSite = async () => {
+	const tab = await getCurrentTab()
+	if (tab.url) sendWebsite(tab.url)
 }
 
 /**

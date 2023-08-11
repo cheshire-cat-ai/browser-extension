@@ -20,7 +20,7 @@
         "default_title": "Cheshire Cat Chat"
     },
     "permissions": [
-        "tabs",
+        "activeTab",
         "storage"
     ],
     "options_ui": {

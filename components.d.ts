@@ -7,8 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Dialog: typeof import('@headlessui/vue')['Dialog']
-    DialogPanel: typeof import('@headlessui/vue')['DialogPanel']
     HeroiconsArrowDown20Solid: typeof import('~icons/heroicons/arrow-down20-solid')['default']
     HeroiconsBoltSolid: typeof import('~icons/heroicons/bolt-solid')['default']
     HeroiconsDocumentTextSolid: typeof import('~icons/heroicons/document-text-solid')['default']
@@ -19,8 +17,5 @@ declare module 'vue' {
     MessageBox: typeof import('./src/components/MessageBox.vue')['default']
     ModalBox: typeof import('./src/components/ModalBox.vue')['default']
     NotificationStack: typeof import('./src/components/NotificationStack.vue')['default']
-    PhBrainFill: typeof import('~icons/ph/brain-fill')['default']
-    TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
-    TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
   }
 }

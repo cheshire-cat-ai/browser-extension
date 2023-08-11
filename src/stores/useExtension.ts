@@ -1,10 +1,10 @@
-import { useMessages } from '@stores/useMessages'
-import { useRabbitHole } from '@stores/useRabbitHole'
+//import { useMessages } from '@stores/useMessages'
+//import { useRabbitHole } from '@stores/useRabbitHole'
 
 export const useExtension = defineStore('extension', () => {
 
-  const { dispatchMessage } = useMessages()
-  const { sendWebsite } = useRabbitHole()
+  //const { dispatchMessage } = useMessages()
+  //const { sendWebsite } = useRabbitHole()
 
   /*tryOnMounted(() => {
     (chrome || browser).runtime.onMessage.addListener(msg => {
@@ -22,8 +22,9 @@ export const useExtension = defineStore('extension', () => {
     });
   })*/
 
-  const getCurrentTab = (callback: (tabs: chrome.tabs.Tab[]) => void) => {
-    (chrome || browser).tabs.query({ active: true, lastFocusedWindow: true }, callback)
+  const getCurrentTab = async () => {
+    const [ tab ] = await (chrome || browser).tabs.query({ active: true, lastFocusedWindow: true })
+    return tab
   }
 
   return {
